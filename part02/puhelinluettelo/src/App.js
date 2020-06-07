@@ -1,19 +1,22 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 
 import Form from './Form'
 import InputField from './InputField'
 import Persons from './Persons'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ])
+  const [persons, setPersons] = useState(null)
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
+
+  useEffect(() => {
+    axios.get('http://localhost:3001/persons').then(({ data }) => {
+      console.log(data)
+      setPersons(data)
+    })
+  }, [])
 
   const addNewPerson = (event) => {
     event.preventDefault()
@@ -67,8 +70,14 @@ const App = () => {
       <InputField label="Search person or number" handler={updateSearchValue} value={search} />
       <h2>Add a new</h2>
       <Form {...formProps} />
-      <h2>Numbers</h2>
-      <Persons data={showPersons} />
+      {
+        showPersons && (
+          <>
+            <h2>Numbers</h2>
+            <Persons data={showPersons} />
+          </>
+        )
+      }
     </div>
   )
 
