@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
-import Countries from './Countries'
+import Country from './Country'
 
 const App = () => {
   const [countryData, setCountryData] = useState(null)
@@ -23,14 +23,20 @@ const App = () => {
     const showCountries = search !== '' ? countryData.filter(({ name }) => (name.toLowerCase().match(search.toLowerCase()))) : []
     return (
       <>
-        <div>
-          Find countries:
-          {' '}
-          <input onChange={updateSearch} type="text" value={search} />
-          {
-            <Countries data={showCountries} />
-          }
-        </div>
+        Find countries:
+        {' '}
+        <input onChange={updateSearch} type="text" value={search} />
+        {
+          showCountries.length > 10 ? (
+            <p>Too many matches, specify another filter</p>
+          ) : (
+            <>
+            {
+              showCountries.map((c) => <Country {...c} key={c.name} />)
+            }
+          </>
+          )
+        }
       </>
     )
   }
