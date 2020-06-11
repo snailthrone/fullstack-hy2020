@@ -10,7 +10,7 @@ const Persons = ({ data, deleteNumber }) => {
     <ul>
       {
         data.map(({ id, name, number }) => (
-          <li key={name}>{name} {number} <Button handler={handler(id, name)} title="Delete" /></li>
+          <li key={id}>{name} {number} <Button handler={handler(id, name)} title="Delete" /></li>
         ))
       }
     </ul>
