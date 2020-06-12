@@ -39,8 +39,7 @@ const App = () => {
           setPersons((state) => state.map((p) => p.id === person.id ? person : p))
           setMessage({ message: `Updated ${newName}'s number on the phonebook.`, state: 'success' })
         }).catch(error => {
-          console.log(error.message)
-          setMessage({ message: 'An error occured', state: 'error' })
+          setMessage({ message: error.response.data.error, state: 'error' })
         })
       }
     } else {
@@ -48,8 +47,7 @@ const App = () => {
         setPersons((state) => state.concat(person))
         setMessage({ message: `Added ${newName} to phonebook.`, state: 'success' })
       }).catch(error => {
-        console.log(error.message)
-        setMessage({ message: 'An error occured', state: 'error' })
+        setMessage({ message: error.response.data.error, state: 'error' })
       })
     }
   }
