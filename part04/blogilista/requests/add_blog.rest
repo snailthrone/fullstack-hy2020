@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hcnR0ZWUiLCJpZCI6IjVlZjIxNmJlN2YwZWZmYjcwYWQ2MTI3YyIsImlhdCI6MTU5MjkyMzg2NX0.OtasmlA3GssZDuMTH0Vik1jj37Xpo1L3gOuz9WBy2BU
+
+{
+  "title": "You may not need d3",
+ "author": "Jerome Cukier",
+  "url": "http://www.jeromecukier.net/2015/05/19/you-may-not-need-d3/",
+  "likes": 10
+}
