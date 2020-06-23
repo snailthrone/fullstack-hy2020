@@ -44,7 +44,7 @@ const App = () => {
       }
     } else {
       create({ name: newName, number: newNumber }).then(person => {
-        setPersons((state) => state.concat(person))
+        setPersons(state => state.concat(person))
         setMessage({ message: `Added ${newName} to phonebook.`, state: 'success' })
       }).catch(error => {
         setMessage({ message: error.response.data.error, state: 'error' })
