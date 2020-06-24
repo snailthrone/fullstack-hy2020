@@ -3,11 +3,11 @@ import axios from 'axios';
 const baseUrl = '//localhost:3003/api/';
 let token;
 
-const setToken = newToken => {
+export const setToken = newToken => {
   token = `bearer ${newToken}`
 }
 
-const create = async blog => {
+export const create = async blog => {
   const config = {
     headers: { Authorization: token }
   }
@@ -20,7 +20,7 @@ const getAll = async () => {
   return data
 }
 
-const login = async credentials => {
+export const login = async credentials => {
   const { data } = await axios.post(`${baseUrl}login/`, credentials)
   return data;
 }

@@ -3,6 +3,7 @@
 5.1: 1
 5.2: 0.3h
 5.3-5.4: 1h
+5.5-5.7: 1h
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

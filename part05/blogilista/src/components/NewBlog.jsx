@@ -1,19 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const NewBlog = ({ fields, submit }) => (
-  <>
-    <h2>Create a New Blog</h2>
-    <form onSubmit={submit.handler}>
-      {
-        fields.map(({ handler, label, type="text", value }) => (
-          <div key={label}>
-            {label} <input onChange={handler} type={type} value={value} />
-          </div>
-        ))
-      }
-      <button type="submit">{submit.title}</button>
-    </form>
-  </>
-)
+import { create } from '../services/blogs'
+
+const NewBlog = ({ setBlogs, setMessage, toggleNewBlog }) => {
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+
+  const createBlog = async (event) => {
+    event.preventDefault();
+    try {
+      const blog = await create({ title, author, url })
+      setBlogs(blogs => blogs.concat(blog))
+      setMessage({ message: `A new blog ${title} by ${author} added.`, type: 'success' })
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+      toggleNewBlog(false)
+    } catch (exception) {
+      setMessage({ message: 'Error', type: 'error' })
+    }
+  }
+
+  return (
+    <>
+      <h2>Create a New Blog</h2>
+      <form onSubmit={createBlog}>
+        <div>
+          Title <input onChange={({ target }) => setTitle(target.value)} type="text" value={title} />
+        </div>
+        <div>
+          Author <input onChange={({ target }) => setAuthor(target.value)} type="text" value={author} />
+        </div>
+        <div>
+          Url <input onChange={({ target }) => setUrl(target.value)} type="text" value={url} />
+        </div>
+        <button type="submit">Add</button>
+      </form>
+    </>
+  )
+}
 
 export default NewBlog;
