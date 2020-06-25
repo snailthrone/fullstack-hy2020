@@ -183,14 +183,16 @@ describe('deleting a blog', () => {
 describe('updating a blog', () => {
   test('request returns HTTP 200', async () => {
     const blogs = await blogsInDatabase()
-    await api.put(`/api/blogs/${blogs[0].id}`)
+    const [ blogToModify ] = blogs;
+    await api.put(`/api/blogs/${blogToModify.id}`)
+      .send(blogToModify)
       .expect(200)
       .expect('Content-Type', /application\/json/)
   })
 
   test('amount of likes is changed', async () => {
     const blogs = await blogsInDatabase()
-    const blogToModify = blogs[0]
+    const [ blogToModify ] = blogs;
     const likes = 100
 
     const response = await api.put(`/api/blogs/${blogToModify.id}`).send({ ...blogToModify, likes })
@@ -201,7 +203,7 @@ describe('updating a blog', () => {
 
   test('title is changed', async () => {
     const blogs = await blogsInDatabase()
-    const blogToModify = blogs[0]
+    const [ blogToModify ] = blogs;
     const { title } = blogs[3]
 
     const response = await api.put(`/api/blogs/${blogToModify.id}`)
@@ -213,7 +215,7 @@ describe('updating a blog', () => {
 
   test('url is changed', async () => {
     const blogs = await blogsInDatabase()
-    const blogToModify = blogs[0]
+    const [ blogToModify ] = blogs;
     const { url } = blogs[3]
 
     const response = await api.put(`/api/blogs/${blogToModify.id}`)
@@ -225,7 +227,7 @@ describe('updating a blog', () => {
 
   test('author is changed', async () => {
     const blogs = await blogsInDatabase()
-    const blogToModify = blogs[0]
+    const [ blogToModify ] = blogs;
     const { author } = blogs[3]
 
     const response = await api.put(`/api/blogs/${blogToModify.id}`)
@@ -245,7 +247,6 @@ describe('getting users', () => {
 
   test('user object has a correct shape', async () => {
     const response = await api.get('/api/users/')
-    // TODO: refactor below
     expect(response.body[0].id).toBeDefined()
     expect(response.body[0].name).toBeDefined()
     expect(response.body[0].username).toBeDefined()
