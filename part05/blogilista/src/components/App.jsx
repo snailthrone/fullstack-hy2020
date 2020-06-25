@@ -1,29 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react'
 
 // Components
-import BlogList from './BlogList'
+import Blog from './Blog'
 import Login from './Login'
 import NewBlog from './NewBlog'
-import Notification from './Notification';
+import Notification from './Notification'
 
 // Services
-import { setToken } from '../services/blogs'
+import { get, setToken } from '../services/blogs'
 
 const App = () => {
-  const [showNewBlog, setShowNewBlog] = useState(false);
+  const [showNewBlog, setShowNewBlog] = useState(false)
   const [blogs, setBlogs] = useState([])
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null)
 
   const [message, setMessage] = useState(null)
 
-  const getBlogs = async () => {
-    const blogs = await blogService.getAll()
+  const getBlogs = useCallback(async () => {
+    const blogs = await get()
     setBlogs(blogs)
-  }
+  }, [])
 
   useEffect(() => {
     getBlogs()
-  }, [])
+  }, [getBlogs])
 
   useEffect(() => {
     const loggedUser = window.localStorage.getItem('loggedUser')
@@ -47,7 +47,9 @@ const App = () => {
     setUser(null)
   }
 
-  const toggleNewBlog = () => setShowNewBlog(show => !show);
+  const toggleNewBlog = () => setShowNewBlog(show => !show)
+
+  const sortedBlogs = [...blogs].sort((a,b) => b.likes - a.likes)
 
   return (
     <div>
@@ -65,12 +67,14 @@ const App = () => {
               <button onClick={logout} type="button">Logout</button>
             </div>
             <div>
-            {
+              {
                 showNewBlog && <NewBlog setBlogs={setBlogs} setMessage={setMessage} toggleNewBlog={toggleNewBlog} />
               }
               <button onClick={toggleNewBlog}>{showNewBlog ? 'Cancel' : 'Add Blog'}</button>
             </div>
-            <BlogList blogs={blogs} name={user.name} />
+            {
+              sortedBlogs.map(blog => <Blog key={blog.id} blog={blog} setMessage={setMessage} setBlogs={setBlogs} />)
+            }
           </>
         ) : (
           <Login setMessage={setMessage} setUser={setUser} />
@@ -80,4 +84,4 @@ const App = () => {
   )
 }
 
-export default App;
+export default App

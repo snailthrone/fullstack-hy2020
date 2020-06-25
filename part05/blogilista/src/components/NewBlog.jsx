@@ -1,24 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
-import { create } from '../services/blogs'
+import { create } from '../services/blogs'
+import { func } from 'prop-types'
 
-const NewBlog = ({ setBlogs, setMessage, toggleNewBlog }) => {
+const NewBlog = ({ setBlogs, setMessage, toggleNewBlog }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
   const createBlog = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
     try {
       const blog = await create({ title, author, url })
       setBlogs(blogs => blogs.concat(blog))
-      setMessage({ message: `A new blog ${title} by ${author} added.`, type: 'success' })
+      setMessage({ message: `A new blog ${title} by ${author} added.`, type: 'success' })
       setTitle('')
       setAuthor('')
       setUrl('')
       toggleNewBlog(false)
     } catch (exception) {
-      setMessage({ message: 'Error', type: 'error' })
+      setMessage({ message: 'Error', type: 'error' })
     }
   }
 
@@ -41,4 +42,10 @@ const NewBlog = ({ setBlogs, setMessage, toggleNewBlog }) => {
   )
 }
 
-export default NewBlog;
+NewBlog.propTypes = {
+  setBlogs: func.isRequired,
+  setMessage: func.isRequired,
+  toggleNewBlog: func.isRequired,
+}
+
+export default NewBlog

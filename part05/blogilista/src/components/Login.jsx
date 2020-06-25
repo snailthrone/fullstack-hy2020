@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+import { func } from 'prop-types'
 
 import { login, setToken } from '../services/blogs'
 
@@ -7,15 +8,15 @@ const Login = ({ setMessage, setUser }) => {
   const [password, setPassword] = useState('')
 
   const handleLogin = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
     try {
-      const user = await login({ username, password });
+      const user = await login({ username, password })
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
       setUser(user)
       setToken(user.token)
-      setMessage({ message: 'Successful login', type: 'success' })
+      setMessage({ message: 'Successful login', type: 'success' })
     } catch (exception) {
-      setMessage({ message: 'Invalid username or password', type: 'error' })
+      setMessage({ message: 'Invalid username or password', type: 'error' })
     }
   }
 
@@ -24,10 +25,10 @@ const Login = ({ setMessage, setUser }) => {
       <h2>Log in to Application</h2>
       <form onSubmit={handleLogin}>
         <div>
-          Username <input onChange={({ target }) => setUsername(target.value)} type="text" value={username} />
+          Username <input onChange={({ target }) => setUsername(target.value)} type="text" value={username} />
         </div>
         <div>
-          Password <input onChange={({ target }) => setPassword(target.value)} type="password" value={password} />
+          Password <input onChange={({ target }) => setPassword(target.value)} type="password" value={password} />
         </div>
         <button type="submit">Login</button>
       </form>
@@ -35,4 +36,9 @@ const Login = ({ setMessage, setUser }) => {
   )
 }
 
-export default Login;
+Login.propTypes = {
+  setMessage: func.isRequired,
+  setUser: func.isRequired
+}
+
+export default Login
