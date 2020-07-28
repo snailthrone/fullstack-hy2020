@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { func, number, shape, string } from 'prop-types'
 
-import { like, remove } from '../services/blogs'
+import { like, remove } from '../../services/blogs'
 
 const Blog = ({ blog, setMessage, setBlogs }) => {
   const [showInfo, setShowInfo] = useState(false)
@@ -50,6 +50,9 @@ Blog.propTypes = {
     author: string.isRequired,
     url: string.isRequired,
     likes: number.isRequired,
+    user: shape({
+      name: string.isRequired,
+    }).isRequired,
   }).isRequired,
   setMessage: func.isRequired,
   setBlogs: func.isRequired,
