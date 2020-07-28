@@ -22,8 +22,10 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    getBlogs()
-  }, [getBlogs])
+    if (user) {
+      getBlogs()
+    }
+  }, [getBlogs, user])
 
   useEffect(() => {
     const loggedUser = window.localStorage.getItem('loggedUser')
