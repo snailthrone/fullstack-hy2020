@@ -2,9 +2,10 @@ const cors = require('cors')
 const express = require('express')
 const mongoose = require('mongoose')
 
-// Controller
+// Controllers
 const blogRouter = require('./controllers/blogs')
 const loginRouter = require('./controllers/login')
+const testingRouter = require('./controllers/testing')
 const usersRouter = require('./controllers/users')
 
 // Utils
@@ -25,14 +26,16 @@ mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology
 app.use(cors())
 app.use(express.json())
 
-if (process.env.NODE_ENV !== 'test') {
-  app.use(middleware.requestLogger)
-}
+app.use(middleware.requestLogger)
 app.use(middleware.tokenExtractor)
 
 app.use('/api/blogs/', blogRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/users/', usersRouter)
+
+if (process.env.NODE_ENV === 'test') {
+  app.use('/api/testing', testingRouter)
+}
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
