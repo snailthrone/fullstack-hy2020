@@ -7,7 +7,7 @@ import NewBlog from './NewBlog'
 import Notification from './Notification'
 
 // Services
-import { get, setToken } from '../services/blogs'
+import { create, get, like, remove, setToken } from '../services/blogs'
 
 const App = () => {
   const [showNewBlog, setShowNewBlog] = useState(false)
@@ -49,6 +49,35 @@ const App = () => {
 
   const toggleNewBlog = () => setShowNewBlog(show => !show)
 
+  const createBlog = async (blog) => {
+    try {
+      const newBlog = await create(blog)
+      setBlogs(blogs => blogs.concat(newBlog))
+      setMessage({ message: `A new blog ${newBlog.title} by ${newBlog.author} added.`, type: 'success' })
+      setShowNewBlog(false)
+    } catch (exception) {
+      setMessage({ message: 'Error', type: 'error' })
+    }
+  }
+
+  const handleLike = (blog) => async () => {
+    console.log(blog)
+    const likedBlog = await like({ ...blog, likes: blog.likes + 1 })
+    setBlogs(blogs => blogs.map(b => b.id === likedBlog.id ? likedBlog : b))
+  }
+
+  const removeBlog = (blog) => async () => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      try {
+        await remove(blog.id)
+        setBlogs(blogs => blogs.filter(({ id }) => id !== blog.id))
+        setMessage({ message: `Removed ${blog.title} by ${blog.author}.`, type: 'success' })
+      } catch (error) {
+        setMessage({ message: `Could not remove ${blog.title} by ${blog.author}.`, type: 'error' })
+      }
+    }
+  }
+
   const sortedBlogs = [...blogs].sort((a,b) => b.likes - a.likes)
 
   return (
@@ -68,12 +97,12 @@ const App = () => {
             </div>
             <div>
               {
-                showNewBlog && <NewBlog setBlogs={setBlogs} setMessage={setMessage} toggleNewBlog={toggleNewBlog} />
+                showNewBlog && <NewBlog createBlog={createBlog} />
               }
               <button onClick={toggleNewBlog}>{showNewBlog ? 'Cancel' : 'Add Blog'}</button>
             </div>
             {
-              sortedBlogs.map(blog => <Blog key={blog.id} blog={blog} setMessage={setMessage} setBlogs={setBlogs} />)
+              sortedBlogs.map(blog => <Blog key={blog.id} blog={blog} handleLike={handleLike} removeBlog={removeBlog} />)
             }
           </>
         ) : (

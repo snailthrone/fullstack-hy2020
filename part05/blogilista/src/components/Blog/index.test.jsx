@@ -14,11 +14,11 @@ const mockBlog = {
   }
 }
 
-const setBlogs = jest.fn()
-const setMessage = jest.fn()
+const handleLike = jest.fn()
+const removeBlog = jest.fn()
 
 test('renders title and author but not url and likes', () => {
-  const component = render(<Blog blog={mockBlog} setBlogs={setBlogs} setMessage={setMessage} />)
+  const component = render(<Blog blog={mockBlog} handleLike={handleLike} removeBlog={removeBlog} />)
 
   expect(component.container).toHaveTextContent(mockBlog.title)
   expect(component.container).toHaveTextContent(mockBlog.author)
@@ -26,14 +26,28 @@ test('renders title and author but not url and likes', () => {
   expect(component.container).not.toHaveTextContent(mockBlog.likes)
 })
 
-test('renders url and likes after button press', async () => {
-  const component = render(<Blog blog={mockBlog} setBlogs={setBlogs} setMessage={setMessage} />)
+test('renders url and likes after show button is pressed', async () => {
+  const component = render(<Blog blog={mockBlog} handleLike={handleLike} removeBlog={removeBlog} />)
 
   const showButton = component.getByText('Show')
   fireEvent.click(showButton)
 
   expect(component.container).toHaveTextContent(mockBlog.url)
   expect(component.container).toHaveTextContent(mockBlog.likes)
+})
+
+test('like button handler is called twice', async () => {
+  const component = render(<Blog blog={mockBlog} handleLike={handleLike} removeBlog={removeBlog} />)
+
+  const showButton = component.getByText('Show')
+  fireEvent.click(showButton)
+
+  const likeButton = component.getByText('Like')
+
+  fireEvent.click(likeButton)
+  fireEvent.click(likeButton)
+
+  expect(handleLike).toBeCalledTimes(2)
 })
 
 
