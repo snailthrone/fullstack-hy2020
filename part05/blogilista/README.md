@@ -12,6 +12,8 @@
 
 5.13–5.16: 2h
 
+5.17-5.22: 3h
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

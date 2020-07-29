@@ -14,7 +14,7 @@ const Login = ({ setMessage, setUser }) => {
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
       setUser(user)
       setToken(user.token)
-      setMessage({ message: 'Successful login', type: 'success' })
+      setMessage({ message: `${user.name} logged in`, type: 'success' })
     } catch (exception) {
       setMessage({ message: 'Invalid username or password', type: 'error' })
     }
@@ -25,12 +25,12 @@ const Login = ({ setMessage, setUser }) => {
       <h2>Log in to Application</h2>
       <form onSubmit={handleLogin}>
         <div>
-          Username <input onChange={({ target }) => setUsername(target.value)} type="text" value={username} />
+          Username <input id="username" onChange={({ target }) => setUsername(target.value)} type="text" value={username} />
         </div>
         <div>
-          Password <input onChange={({ target }) => setPassword(target.value)} type="password" value={password} />
+          Password <input id="password" onChange={({ target }) => setPassword(target.value)} type="password" value={password} />
         </div>
-        <button type="submit">Login</button>
+        <button id="login-button" type="submit">Login</button>
       </form>
     </>
   )

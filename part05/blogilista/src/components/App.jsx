@@ -95,13 +95,13 @@ const App = () => {
             <h2>Blogs</h2>
             <div>
               <span>{user.name} logged in</span>
-              <button onClick={logout} type="button">Logout</button>
+              <button id="logout-button" onClick={logout} type="button">Logout</button>
             </div>
             <div>
               {
                 showNewBlog && <NewBlog createBlog={createBlog} />
               }
-              <button onClick={toggleNewBlog}>{showNewBlog ? 'Cancel' : 'Add Blog'}</button>
+              <button id="blog-form-button" onClick={toggleNewBlog}>{showNewBlog ? 'Cancel' : 'Add Blog'}</button>
             </div>
             {
               sortedBlogs.map(blog => <Blog key={blog.id} blog={blog} handleLike={handleLike} removeBlog={removeBlog} />)
