@@ -14,8 +14,13 @@ const notificationReducer = (state = initialState, action) => {
   }
 }
 
-export const notify = message => ({ type: 'NOTIFY', message })
-
-export const hideNotification = () => ({ type: 'HIDE' })
+export const setNotification = (message, duration) => (
+  async dispatch => {
+    dispatch({ type: 'NOTIFY', message })
+    await new Promise(() => setTimeout(() => {
+      dispatch({ type: 'HIDE' })
+    }, duration * 1000))
+  }
+)
 
 export default notificationReducer

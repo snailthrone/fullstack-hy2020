@@ -8,13 +8,11 @@ import Notification from './components/Notification'
 
 import { initAnecdotes } from './reducers/anecdoteReducer'
 
-import { getAll } from './services/anecdotes'
-
 const App = () => {
   const dispatch = useDispatch()
   
   useEffect(() => {
-    getAll().then(anecdotes => dispatch(initAnecdotes(anecdotes)))
+    dispatch(initAnecdotes())
   }, [dispatch])
   
   return (
