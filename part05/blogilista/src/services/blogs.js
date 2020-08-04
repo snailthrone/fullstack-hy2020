@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const baseUrl = '//localhost:3003/api/'
+import { baseUrl } from './common'
+
 let token
 
 export const create = async blog => {
@@ -25,11 +26,6 @@ export const get = async () => {
 
 export const like = async blog => {
   const { data } = await axios.put(`${baseUrl}blogs/${blog.id}`, blog)
-  return data
-}
-
-export const login = async credentials => {
-  const { data } = await axios.post(`${baseUrl}login/`, credentials)
   return data
 }
 

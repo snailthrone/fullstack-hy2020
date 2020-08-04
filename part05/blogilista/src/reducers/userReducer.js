@@ -1,12 +1,19 @@
-import { login, setToken } from '../services/blogs'
+import { setToken } from '../services/blogs'
+import { get, login } from '../services/users'
 
+const initialState = {
+  user: null,
+  users: []
+}
 
-const userReducer = (state = null, action) => {
+const userReducer = (state = initialState, action) => {
   switch (action.type) {
   case 'INIT_USER':
-    return action.user
+    return { ...state, user: action.user }
+  case 'INIT_USERS':
+    return { ...state, users: action.data }
   case 'LOGIN':
-    return action.user
+    return { ...state, user: action.user }
   case 'LOGOUT':
     return null
   default:
@@ -21,6 +28,11 @@ export const initUser = () => async dispatch => {
     dispatch({ type: 'INIT_USER', user })
     setToken(user.token)
   }
+}
+
+export const initUsers = () => async dispatch => {
+  const data = await get()
+  dispatch({ type: 'INIT_USERS', data })
 }
 
 export const userLogin = ({ username, password }) => async dispatch => {

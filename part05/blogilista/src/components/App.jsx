@@ -2,22 +2,25 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 // Components
-import Blog from './Blog'
+import Blogs from './Blogs'
 import Login from './Login'
-import NewBlog from './NewBlog'
 import Notification from './Notification'
+import User from './User'
+import Users from './Users'
 
 // Reducers
-import { initBlogs, showDialog } from '../reducers/blogReducer'
-import { initUser, userLogout } from '../reducers/userReducer'
+import { initBlogs } from '../reducers/blogReducer'
+import { initUser, initUsers, userLogout } from '../reducers/userReducer'
+import { Route, Switch, useRouteMatch } from 'react-router-dom'
 
 const App = () => {
   const dispatch = useDispatch()
-  const { blogs: { blogs, showNewBlog }, login: user } = useSelector(state => state)
+  const { login: { user, users } } = useSelector(state => state)
 
   useEffect(() => {
     if (user) {
       dispatch(initBlogs())
+      dispatch(initUsers())
     } else {
       dispatch(initUser(user))
     }
@@ -25,11 +28,8 @@ const App = () => {
 
   const logout = () => dispatch(userLogout())
 
-  const toggleNewBlog = () => dispatch(showDialog())
-
-  const sortedBlogs = [...blogs].sort((a,b) => b.likes - a.likes)
-
-  console.log(blogs)
+  const match = useRouteMatch('/users/:id')
+  const userMatch = match && users.find(u => u.id === match.params.id)
 
   return (
     <div>
@@ -37,20 +37,24 @@ const App = () => {
       {
         user ? (
           <>
-            <h2>Blogs</h2>
+            <h1>Blogs</h1>
             <div>
               <span>{user.name} logged in</span>
               <button id="logout-button" onClick={logout} type="button">Logout</button>
             </div>
-            <div>
-              {
-                showNewBlog && <NewBlog />
-              }
-              <button id="blog-form-button" onClick={toggleNewBlog}>{showNewBlog ? 'Cancel' : 'Add Blog'}</button>
-            </div>
-            {
-              sortedBlogs.map(blog => <Blog key={blog.id} blog={blog} />)
-            }
+            <Switch>
+              <Route path="/users/:id">
+                {
+                  userMatch && <User {...userMatch} />
+                }
+              </Route>
+              <Route path="/users/">
+                <Users />
+              </Route>
+              <Route path="/">
+                <Blogs />
+              </Route>
+            </Switch>
           </>
         ) : (
           <Login />
