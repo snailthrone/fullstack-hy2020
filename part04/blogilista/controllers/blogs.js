@@ -32,7 +32,7 @@ blogRouter.post('/', async (request, response, next) => {
     title,
     url,
     user: user._id
-  })
+  }).populate('user', { username: 1, name: 1, id: 1 })
 
   try {
     const savedBlog = await blog.save()
