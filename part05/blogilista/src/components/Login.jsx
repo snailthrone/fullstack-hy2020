@@ -1,23 +1,31 @@
-import React, { useState } from 'react'
-import { func } from 'prop-types'
+import React from 'react'
+import { useDispatch } from 'react-redux'
 
-import { login, setToken } from '../services/blogs'
+// Hooks
+import useField from '../hooks/useField'
 
-const Login = ({ setMessage, setUser }) => {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+// Reducers
+import { userLogin } from '../reducers/userReducer'
+import { setNotification } from '../reducers/notificationReducer'
 
-  const handleLogin = async (event) => {
+const Login = () => {
+  const dispatch = useDispatch()
+
+  const username = useField('text')
+  const password = useField('password')
+
+  const handleLogin = async event => {
     event.preventDefault()
-    try {
-      const user = await login({ username, password })
-      window.localStorage.setItem('loggedUser', JSON.stringify(user))
-      setUser(user)
-      setToken(user.token)
-      setMessage({ message: `${user.name} logged in`, type: 'success' })
-    } catch (exception) {
-      setMessage({ message: 'Invalid username or password', type: 'error' })
+    const user= await dispatch(userLogin({ username: username.value, password: password.value }))
+
+    if (user) {
+      dispatch(setNotification(`${user.name} logged in`, 'success'))
+    } else {
+      dispatch(setNotification('Invalid username or password', 'error'))
     }
+
+    username.reset()
+    password.reset()
   }
 
   return (
@@ -25,20 +33,15 @@ const Login = ({ setMessage, setUser }) => {
       <h2>Log in to Application</h2>
       <form onSubmit={handleLogin}>
         <div>
-          Username <input id="username" onChange={({ target }) => setUsername(target.value)} type="text" value={username} />
+          Username <input id="username" {...username} reset={null} />
         </div>
         <div>
-          Password <input id="password" onChange={({ target }) => setPassword(target.value)} type="password" value={password} />
+          Password <input id="password" {...password} reset={null} />
         </div>
         <button id="login-button" type="submit">Login</button>
       </form>
     </>
   )
-}
-
-Login.propTypes = {
-  setMessage: func.isRequired,
-  setUser: func.isRequired
 }
 
 export default Login

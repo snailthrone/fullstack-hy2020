@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 // Components
 import Blog from './Blog'
@@ -6,89 +7,33 @@ import Login from './Login'
 import NewBlog from './NewBlog'
 import Notification from './Notification'
 
-// Services
-import { create, get, like, remove, setToken } from '../services/blogs'
+// Reducers
+import { initBlogs, showDialog } from '../reducers/blogReducer'
+import { initUser, userLogout } from '../reducers/userReducer'
 
 const App = () => {
-  const [showNewBlog, setShowNewBlog] = useState(false)
-  const [blogs, setBlogs] = useState([])
-  const [user, setUser] = useState(null)
-
-  const [message, setMessage] = useState(null)
-
-  const getBlogs = useCallback(async () => {
-    const blogs = await get()
-    setBlogs(blogs)
-  }, [])
+  const dispatch = useDispatch()
+  const { blogs: { blogs, showNewBlog }, login: user } = useSelector(state => state)
 
   useEffect(() => {
     if (user) {
-      getBlogs()
+      dispatch(initBlogs())
+    } else {
+      dispatch(initUser(user))
     }
-  }, [getBlogs, user])
+  }, [dispatch, user])
 
-  useEffect(() => {
-    const loggedUser = window.localStorage.getItem('loggedUser')
-    if (loggedUser) {
-      const user = JSON.parse(loggedUser)
-      setUser(user)
-      setToken(user.token)
-    }
-  }, [])
+  const logout = () => dispatch(userLogout())
 
-  useEffect(() => {
-    if (message) {
-      const messageRemove = setTimeout(() => setMessage(null), 5000)
-
-      return () => clearTimeout(messageRemove)
-    }
-  }, [message])
-
-  const logout = () => {
-    window.localStorage.removeItem('loggedUser')
-    setUser(null)
-  }
-
-  const toggleNewBlog = () => setShowNewBlog(show => !show)
-
-  const createBlog = async (blog) => {
-    try {
-      const newBlog = await create(blog)
-      setBlogs(blogs => blogs.concat(newBlog))
-      setMessage({ message: `A new blog ${newBlog.title} by ${newBlog.author} added.`, type: 'success' })
-      setShowNewBlog(false)
-    } catch (exception) {
-      setMessage({ message: 'Error', type: 'error' })
-    }
-  }
-
-  const handleLike = (blog) => async () => {
-    console.log(blog)
-    const likedBlog = await like({ ...blog, likes: blog.likes + 1 })
-    setBlogs(blogs => blogs.map(b => b.id === likedBlog.id ? likedBlog : b))
-  }
-
-  const removeBlog = (blog) => async () => {
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      try {
-        await remove(blog.id)
-        setBlogs(blogs => blogs.filter(({ id }) => id !== blog.id))
-        setMessage({ message: `Removed ${blog.title} by ${blog.author}.`, type: 'success' })
-      } catch (error) {
-        setMessage({ message: `Could not remove ${blog.title} by ${blog.author}.`, type: 'error' })
-      }
-    }
-  }
+  const toggleNewBlog = () => dispatch(showDialog())
 
   const sortedBlogs = [...blogs].sort((a,b) => b.likes - a.likes)
 
+  console.log(blogs)
+
   return (
     <div>
-      {
-        message && (
-          <Notification {...message} />
-        )
-      }
+      <Notification />
       {
         user ? (
           <>
@@ -99,16 +44,16 @@ const App = () => {
             </div>
             <div>
               {
-                showNewBlog && <NewBlog createBlog={createBlog} />
+                showNewBlog && <NewBlog />
               }
               <button id="blog-form-button" onClick={toggleNewBlog}>{showNewBlog ? 'Cancel' : 'Add Blog'}</button>
             </div>
             {
-              sortedBlogs.map(blog => <Blog key={blog.id} blog={blog} handleLike={handleLike} removeBlog={removeBlog} />)
+              sortedBlogs.map(blog => <Blog key={blog.id} blog={blog} />)
             }
           </>
         ) : (
-          <Login setMessage={setMessage} setUser={setUser} />
+          <Login />
         )
       }
     </div>

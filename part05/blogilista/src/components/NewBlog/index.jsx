@@ -1,17 +1,28 @@
-import React, { useState } from 'react'
-import { func } from 'prop-types'
+import React from 'react'
+import { useDispatch } from 'react-redux'
 
-const NewBlog = ({ createBlog }) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+// Hooks
+import useField from '../../hooks/useField'
 
-  const addBlog = (event) => {
+// Reducers
+import { createBlog } from '../../reducers/blogReducer'
+import { setNotification } from '../../reducers/notificationReducer'
+
+const NewBlog = () => {
+  const dispatch = useDispatch()
+  const title = useField('text')
+  const author = useField('text')
+  const url = useField('text')
+
+  const addBlog = async event => {
     event.preventDefault()
-    createBlog({ title, author, url })
-    setTitle('')
-    setAuthor('')
-    setUrl('')
+
+    const { message, status } = await dispatch(createBlog({ title: title.value, author: author.value, url: url.value }))
+    dispatch(setNotification(message, status))
+
+    title.reset()
+    author.reset()
+    url.reset()
   }
 
   return (
@@ -19,22 +30,18 @@ const NewBlog = ({ createBlog }) => {
       <h2>Create a New Blog</h2>
       <form onSubmit={addBlog}>
         <div>
-          Title <input id="title" onChange={({ target }) => setTitle(target.value)} type="text" value={title} />
+          Title <input id="title" {...title} reset={null} />
         </div>
         <div>
-          Author <input id="author" onChange={({ target }) => setAuthor(target.value)} type="text" value={author} />
+          Author <input id="author" {...author} reset={null} />
         </div>
         <div>
-          Url <input id="url" onChange={({ target }) => setUrl(target.value)} type="text" value={url} />
+          Url <input id="url" {...url} reset={null} />
         </div>
         <button id="add-blog-button" type="submit">Add</button>
       </form>
     </>
   )
-}
-
-NewBlog.propTypes = {
-  createBlog: func.isRequired,
 }
 
 export default NewBlog

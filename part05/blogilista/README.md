@@ -1,18 +1,6 @@
 ## Time used (h)
 
-5.1: 1
-
-5.2: 0.5h
-
-5.3-5.4: 1h
-
-5.5-5.7: 1h
-
-5.8-5.12: 2h
-
-5.13–5.16: 2h
-
-5.17-5.22: 3h
+7.9–7.12 6h
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
