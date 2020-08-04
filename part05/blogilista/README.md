@@ -2,6 +2,8 @@
 
 7.9–7.12 6h
 
+7.13-7.14 1.5h
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
