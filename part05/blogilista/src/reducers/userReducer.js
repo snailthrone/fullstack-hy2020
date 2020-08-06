@@ -26,7 +26,6 @@ export const initUser = () => async dispatch => {
   if (loggedUser) {
     const user = JSON.parse(loggedUser)
     dispatch({ type: 'INIT_USER', user })
-    setToken(user.token)
   }
 }
 
@@ -40,7 +39,6 @@ export const userLogin = ({ username, password }) => async dispatch => {
     const user = await login({ username, password })
     window.localStorage.setItem('loggedUser', JSON.stringify(user))
     dispatch({ type: 'LOGIN', user })
-    setToken(user.token)
     return user
   } catch (exception) {
     return null

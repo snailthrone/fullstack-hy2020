@@ -2,19 +2,17 @@ import axios from 'axios'
 
 import { baseUrl } from './common'
 
-let token
-
-export const create = async blog => {
+export const create = async (blog, token) => {
   const config = {
-    headers: { Authorization: token }
+    headers: { Authorization: `bearer ${token}` }
   }
   const { data } = await axios.post(`${baseUrl}blogs/`, blog, config)
   return data
 }
 
-export const remove = async id => {
+export const remove = async (id, token) => {
   const config = {
-    headers: { Authorization: token }
+    headers: { Authorization: `bearer ${token}` }
   }
   return await axios.delete(`${baseUrl}blogs/${id}`, config)
 }
@@ -29,6 +27,3 @@ export const like = async blog => {
   return data
 }
 
-export const setToken = newToken => {
-  token = `bearer ${newToken}`
-}

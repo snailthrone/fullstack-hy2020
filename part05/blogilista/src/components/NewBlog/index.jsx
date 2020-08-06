@@ -1,5 +1,5 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 // Hooks
 import useField from '../../hooks/useField'
@@ -10,6 +10,7 @@ import { setNotification } from '../../reducers/notificationReducer'
 
 const NewBlog = () => {
   const dispatch = useDispatch()
+  const { login: user } = useSelector(state => state)
   const title = useField('text')
   const author = useField('text')
   const url = useField('text')
@@ -17,7 +18,7 @@ const NewBlog = () => {
   const addBlog = async event => {
     event.preventDefault()
 
-    const { message, status } = await dispatch(createBlog({ title: title.value, author: author.value, url: url.value }))
+    const { message, status } = await dispatch(createBlog({ title: title.value, author: author.value, url: url.value }, user.token))
     dispatch(setNotification(message, status))
 
     title.reset()

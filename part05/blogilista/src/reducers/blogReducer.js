@@ -1,4 +1,5 @@
 import { create, get, like, remove } from '../services/blogs'
+import { create as createComment } from '../services/comments'
 
 const initialState = {
   blogs: [],
@@ -7,10 +8,17 @@ const initialState = {
 
 const blogReducer = (state = initialState, action) => {
   switch (action.type) {
+  case 'ADD_COMMENT':
+    return { ...state, blogs: state.blogs.map(blog => {
+      if (blog.id === action.comment.blog) {
+        blog.comments = [...blog.comments, action.comment]
+      }
+      return blog
+    }) }
   case 'CREATE_BLOG':
     return { ...state, blogs: [...state.blogs, action.blog], showDialog: false }
   case 'INIT_BLOGS':
-    return { ...state, blogs: action.data.map(blog => ({ ...blog, showInfo: false })) }
+    return { ...state, blogs: action.data }
   case 'LIKE_BLOG':
     return { ...state, blogs: state.blogs.map(blog => {
       if (blog.id === action.blog.id) {
@@ -20,17 +28,31 @@ const blogReducer = (state = initialState, action) => {
     }) }
   case 'SHOW_DIALOG':
     return { ...state, showNewBlog: !state.showNewBlog }
-  case 'SHOW_INFO':
-    return { ...state, blogs: state.blogs.map(blog => {
-      if (blog.id === action.blog.id) {
-        return { ...blog, showInfo: !blog.showInfo }
-      }
-      return blog
-    }) }
   case 'REMOVE_BLOG':
     return { ...state, blogs: state.blogs.filter(blog => blog.id !== action.blog.id) }
   default:
     return state
+  }
+}
+
+export const createBlog = (blog, token) => async dispatch => {
+  try {
+    const newBlog = await create(blog, token)
+    dispatch({ type: 'CREATE_BLOG', blog: newBlog })
+    return { message: `A new blog ${newBlog.title} by ${newBlog.author} added.`, status: 'success' }
+  } catch (exception) {
+    console.log(exception)
+    return { message: 'Error while adding a blog', status: 'error' }
+  }
+}
+
+export const addComment = (id, comment, token) => async dispatch => {
+  try {
+    const newComment = await createComment(id, comment, token)
+    dispatch({ type: 'ADD_COMMENT', comment: newComment })
+    return { message: 'New comment added', status: 'success' }
+  } catch (exception) {
+    return { message: 'Error while adding a comment', status: 'error' }
   }
 }
 
@@ -40,17 +62,6 @@ export const initBlogs = () => (
     dispatch({ type: 'INIT_BLOGS', data })
   }
 )
-
-export const createBlog = blog => async dispatch => {
-  try {
-    const newBlog = await create(blog)
-    dispatch({ type: 'CREATE_BLOG', blog: newBlog })
-    return { message: `A new blog ${newBlog.title} by ${newBlog.author} added.`, status: 'success' }
-  } catch (exception) {
-    console.log(exception)
-    return { message: 'Error while adding a blog', status: 'error' }
-  }
-}
 
 export const likeBlog = blog => async dispatch => {
   const likedBlog = await like({ ...blog, likes: blog.likes + 1 })
@@ -72,10 +83,6 @@ export const removeBlog = blog => async dispatch => {
 
 export const showDialog = () => async dispatch => {
   dispatch({ type: 'SHOW_DIALOG' })
-}
-
-export const showInfo = blog => async dispatch => {
-  dispatch({ type: 'SHOW_INFO', blog })
 }
 
 export default blogReducer

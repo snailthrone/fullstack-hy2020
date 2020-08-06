@@ -1,8 +1,8 @@
 import React  from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 // Components
-import Blog from './Blog'
 import NewBlog from './NewBlog'
 
 // Reducers
@@ -15,6 +15,7 @@ const Blogs = () => {
   const toggleNewBlog = () => dispatch(showDialog())
 
   const sortedBlogs = [...blogs].sort((a,b) => b.likes - a.likes)
+
   return (
     <>
       <div>
@@ -24,7 +25,13 @@ const Blogs = () => {
         <button id="blog-form-button" onClick={toggleNewBlog}>{showNewBlog ? 'Cancel' : 'Add Blog'}</button>
       </div>
       {
-        sortedBlogs.map(blog => <Blog key={blog.id} blog={blog} />)
+        sortedBlogs.map(blog => (
+          <div key={blog.id}>
+            <Link to={`/blogs/${blog.id}`}>
+              {blog.title} {blog.author}
+            </Link>
+          </div>
+        ))
       }
     </>
   )}

@@ -2,20 +2,22 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 // Components
+import Blog from './Blog'
 import Blogs from './Blogs'
 import Login from './Login'
+import NavBar from './NavBar'
 import Notification from './Notification'
 import User from './User'
 import Users from './Users'
 
 // Reducers
 import { initBlogs } from '../reducers/blogReducer'
-import { initUser, initUsers, userLogout } from '../reducers/userReducer'
+import { initUser, initUsers, } from '../reducers/userReducer'
 import { Route, Switch, useRouteMatch } from 'react-router-dom'
 
 const App = () => {
   const dispatch = useDispatch()
-  const { login: { user, users } } = useSelector(state => state)
+  const { blogs: { blogs }, login: { user, users } } = useSelector(state => state)
 
   useEffect(() => {
     if (user) {
@@ -26,10 +28,11 @@ const App = () => {
     }
   }, [dispatch, user])
 
-  const logout = () => dispatch(userLogout())
+  const blogMatch = useRouteMatch('/blogs/:id')
+  const blogFound = blogMatch && blogs.find(b => b.id === blogMatch.params.id)
 
-  const match = useRouteMatch('/users/:id')
-  const userMatch = match && users.find(u => u.id === match.params.id)
+  const userMatch = useRouteMatch('/users/:id')
+  const userFound = userMatch && users.find(u => u.id === userMatch.params.id)
 
   return (
     <div>
@@ -37,16 +40,16 @@ const App = () => {
       {
         user ? (
           <>
+            <NavBar />
             <h1>Blogs</h1>
-            <div>
-              <span>{user.name} logged in</span>
-              <button id="logout-button" onClick={logout} type="button">Logout</button>
-            </div>
             <Switch>
               <Route path="/users/:id">
                 {
-                  userMatch && <User {...userMatch} />
+                  userFound && <User {...userFound} />
                 }
+              </Route>
+              <Route path="/blogs/:id">
+                { blogFound && <Blog blog={blogFound} /> }
               </Route>
               <Route path="/users/">
                 <Users />
