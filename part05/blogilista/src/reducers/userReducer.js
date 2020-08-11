@@ -1,4 +1,3 @@
-import { setToken } from '../services/blogs'
 import { get, login } from '../services/users'
 
 const initialState = {
@@ -15,7 +14,7 @@ const userReducer = (state = initialState, action) => {
   case 'LOGIN':
     return { ...state, user: action.user }
   case 'LOGOUT':
-    return null
+    return initialState
   default:
     return state
   }

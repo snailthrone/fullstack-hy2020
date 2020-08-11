@@ -1,35 +1,34 @@
 import { create, get, like, remove } from '../services/blogs'
 import { create as createComment } from '../services/comments'
 
-const initialState = {
-  blogs: [],
-  showNewBlog: false
-}
+const initialState = []
 
 const blogReducer = (state = initialState, action) => {
   switch (action.type) {
   case 'ADD_COMMENT':
-    return { ...state, blogs: state.blogs.map(blog => {
+    return state.map(blog => {
       if (blog.id === action.comment.blog) {
         blog.comments = [...blog.comments, action.comment]
       }
       return blog
-    }) }
+    })
+
   case 'CREATE_BLOG':
-    return { ...state, blogs: [...state.blogs, action.blog], showDialog: false }
+    return [...state, action.blog]
+
   case 'INIT_BLOGS':
-    return { ...state, blogs: action.data }
-  case 'LIKE_BLOG':
-    return { ...state, blogs: state.blogs.map(blog => {
-      if (blog.id === action.blog.id) {
-        return action.blog
-      }
-      return blog
-    }) }
-  case 'SHOW_DIALOG':
-    return { ...state, showNewBlog: !state.showNewBlog }
+    return action.data
+
+  case 'LIKE_BLOG': return state.map(blog => {
+    if (blog.id === action.blog.id) {
+      return action.blog
+    }
+    return blog
+  })
+
   case 'REMOVE_BLOG':
-    return { ...state, blogs: state.blogs.filter(blog => blog.id !== action.blog.id) }
+    return state.filter(blog => blog.id !== action.blog.id)
+
   default:
     return state
   }
@@ -79,10 +78,6 @@ export const removeBlog = blog => async dispatch => {
       return { message: `Could not remove ${blog.title} by ${blog.author}.`, status: 'error' }
     }
   }
-}
-
-export const showDialog = () => async dispatch => {
-  dispatch({ type: 'SHOW_DIALOG' })
 }
 
 export default blogReducer

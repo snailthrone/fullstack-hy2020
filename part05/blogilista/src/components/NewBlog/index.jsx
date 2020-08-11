@@ -1,5 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { func } from 'prop-types'
 
 // Hooks
 import useField from '../../hooks/useField'
@@ -8,7 +9,12 @@ import useField from '../../hooks/useField'
 import { createBlog } from '../../reducers/blogReducer'
 import { setNotification } from '../../reducers/notificationReducer'
 
-const NewBlog = () => {
+import { Heading2 } from '../common'
+import { Form, FormLabel, FormLabelText, FormInput } from '../Form'
+
+import * as s from './index.styled'
+
+const NewBlog = ({ hideForm }) => {
   const dispatch = useDispatch()
   const { login: user } = useSelector(state => state)
   const title = useField('text')
@@ -24,25 +30,33 @@ const NewBlog = () => {
     title.reset()
     author.reset()
     url.reset()
+    hideForm()
   }
 
   return (
-    <>
-      <h2>Create a New Blog</h2>
-      <form onSubmit={addBlog}>
-        <div>
-          Title <input id="title" {...title} reset={null} />
-        </div>
-        <div>
-          Author <input id="author" {...author} reset={null} />
-        </div>
-        <div>
-          Url <input id="url" {...url} reset={null} />
-        </div>
-        <button id="add-blog-button" type="submit">Add</button>
-      </form>
-    </>
+    <s.Container>
+      <Heading2>Create a New Blog</Heading2>
+      <Form onSubmit={addBlog}>
+        <FormLabel>
+          <FormLabelText>Title</FormLabelText> <FormInput id="title" {...title} reset={null} />
+        </FormLabel>
+        <FormLabel>
+          <FormLabelText>Author</FormLabelText> <FormInput id="author" {...author} reset={null} />
+        </FormLabel>
+        <FormLabel>
+          <FormLabelText>Url</FormLabelText> <FormInput id="url" {...url} reset={null} />
+        </FormLabel>
+        <s.ButtonWrapper>
+          <s.Button id="add-blog-button" type="submit">Add</s.Button>
+          <s.Button id="cancel-button" onClick={hideForm} type="button">Cancel</s.Button>
+        </s.ButtonWrapper>
+      </Form>
+    </s.Container>
   )
+}
+
+NewBlog.propTypes = {
+  hideForm: func.isRequired
 }
 
 export default NewBlog
