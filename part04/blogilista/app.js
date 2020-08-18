@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 
 // Controllers
 const blogRouter = require('./controllers/blogs')
+const commentRouter = require('./controllers/comments')
 const loginRouter = require('./controllers/login')
 const testingRouter = require('./controllers/testing')
 const usersRouter = require('./controllers/users')
@@ -30,6 +31,7 @@ app.use(middleware.requestLogger)
 app.use(middleware.tokenExtractor)
 
 app.use('/api/blogs/', blogRouter)
+app.use('/api/comments', commentRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/users/', usersRouter)
 

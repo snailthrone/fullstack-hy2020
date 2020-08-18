@@ -7,7 +7,7 @@ const Blog = require('../models/Blog')
 const User = require('../models/User')
 
 blogRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1, id: 1 })
+  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1, id: 1 }).populate('comments', { content: 1, id: 1 }).exec()
   response.json(blogs.map(blog => blog.toJSON()))
 })
 
@@ -45,7 +45,6 @@ blogRouter.post('/', async (request, response, next) => {
 })
 
 blogRouter.delete('/:id', async(request, response, next) => {
-
   const { token } = request
 
   if (!token) {
@@ -75,7 +74,7 @@ blogRouter.delete('/:id', async(request, response, next) => {
 blogRouter.put('/:id', async(request, response, next) => {
   const { body: { id, title, author, url, likes } } = request
   try {
-    const updated = await Blog.findByIdAndUpdate(id, { author, likes, title, url }, { new: true }).populate('user', { username: 1, name: 1, id: 1 })
+    const updated = await Blog.findByIdAndUpdate(id, { author, likes, title, url }, { new: true }).populate('user', { username: 1, name: 1, id: 1 }).populate('comments', { content: 1, id: 1 }).exec()
     response.json(updated.toJSON())
   } catch (error) {
     next(error)
