@@ -21,6 +21,7 @@ const blogReducer = (state = initialState, action) => {
 
   case 'LIKE_BLOG': return state.map(blog => {
     if (blog.id === action.blog.id) {
+      console.log(action.blog)
       return action.blog
     }
     return blog
@@ -68,10 +69,10 @@ export const likeBlog = blog => async dispatch => {
   dispatch({ type: 'LIKE_BLOG', blog: likedBlog })
 }
 
-export const removeBlog = blog => async dispatch => {
+export const removeBlog = (blog, token) => async dispatch => {
   if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
     try {
-      await remove(blog.id)
+      await remove(blog.id, token)
       dispatch({ type: 'REMOVE_BLOG', blog })
       return { message: `Removed ${blog.title} by ${blog.author}.`, status: 'success' }
     } catch (error) {

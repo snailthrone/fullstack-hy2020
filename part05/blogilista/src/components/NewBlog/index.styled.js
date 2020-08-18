@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import BaseButton from '../Button'
 
 export const Container = styled.div`
-  background-color: #18ffff;
+  background-color: #009eae;
   padding: 8px 8px 0 8px;
 `
 

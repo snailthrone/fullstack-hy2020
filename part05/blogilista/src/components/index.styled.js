@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const Container = styled.div`
-  background-color: #76ffff;
+  background-color: #4dd0e1;
   box-sizing: border-box;
   height: 100%;
   position: relative;

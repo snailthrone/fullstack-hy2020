@@ -1,5 +1,5 @@
 const initialState = {
-  message: '',
+  message: 'this is a notification',
   show: false,
 }
 
@@ -21,7 +21,7 @@ export const setNotification = (message, status, duration = 5) => (
       clearTimeout(timeout)
     }
     dispatch({ type: 'SHOW', message, status })
-    timeout = setTimeout(() => { dispatch({ type: 'HIDE' }) }, duration * 1000)
+    timeout = setTimeout(() => dispatch({ type: 'HIDE' }), duration * 1000)
   }
 )
 

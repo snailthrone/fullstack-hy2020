@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Heading2 } from '../common'
 
 import Button from '../Button'
-import { Form, FormInput } from '../Form'
+import { Form, FormInput } from '../common'
 
 export const Container = styled.div`
   background-color: inherit;

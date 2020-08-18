@@ -2,8 +2,9 @@ import styled from 'styled-components'
 
 export default styled.button `
   appearance: none;
-  background-color: #fff;
+  background-color: #87ffff;
   border: none;
+  color: #000;
   display: block;
   font-family: 'Merriweather Sans', sans-serif;
   font-size: 16px;

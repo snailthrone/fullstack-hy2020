@@ -9,22 +9,20 @@ import useField from '../../hooks/useField'
 import { createBlog } from '../../reducers/blogReducer'
 import { setNotification } from '../../reducers/notificationReducer'
 
-import { Heading2 } from '../common'
-import { Form, FormLabel, FormLabelText, FormInput } from '../Form'
+import { Form, FormLabel, FormLabelText, FormInput, Heading2 } from '../common'
 
 import * as s from './index.styled'
 
 const NewBlog = ({ hideForm }) => {
   const dispatch = useDispatch()
-  const { login: user } = useSelector(state => state)
+  const { login } = useSelector(state => state)
   const title = useField('text')
   const author = useField('text')
   const url = useField('text')
 
   const addBlog = async event => {
     event.preventDefault()
-
-    const { message, status } = await dispatch(createBlog({ title: title.value, author: author.value, url: url.value }, user.token))
+    const { message, status } = await dispatch(createBlog({ title: title.value, author: author.value, url: url.value }, login.user.token))
     dispatch(setNotification(message, status))
 
     title.reset()

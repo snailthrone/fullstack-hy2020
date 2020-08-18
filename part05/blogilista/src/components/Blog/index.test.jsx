@@ -1,54 +1,35 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { fireEvent, render } from '@testing-library/react'
+import { fireEvent, render, screen } from '../../../test-utils'
 
 import Blog from '.'
 
 const mockBlog = {
-  title: 'You may not need d3',
+  comments: [{ content: 'this is a test comment', id: 'foo' }],
   author: 'Jerome Cukier',
-  url: 'http://www.jeromecukier.net/2015/05/19/you-may-not-need-d3/',
+  id: 'foo',
   likes: 5,
+  title: 'You may not need d3',
+  url: 'http://www.jeromecukier.net/2015/05/19/you-may-not-need-d3/',
   user: {
-    name: 'John Doe'
+    id: 'bar',
+    name: 'John Doe',
+    username: 'johndoe'
   }
 }
 
-const handleLike = jest.fn()
-const removeBlog = jest.fn()
-
-test('renders title and author but not url and likes', () => {
-  const component = render(<Blog blog={mockBlog} handleLike={handleLike} removeBlog={removeBlog} />)
+test('renders content', () => {
+  const component = render(<Blog blog={mockBlog} />)
 
   expect(component.container).toHaveTextContent(mockBlog.title)
   expect(component.container).toHaveTextContent(mockBlog.author)
-  expect(component.container).not.toHaveTextContent(mockBlog.url)
-  expect(component.container).not.toHaveTextContent(mockBlog.likes)
-})
-
-test('renders url and likes after show button is pressed', async () => {
-  const component = render(<Blog blog={mockBlog} handleLike={handleLike} removeBlog={removeBlog} />)
-
-  const showButton = component.getByText('Show')
-  fireEvent.click(showButton)
-
   expect(component.container).toHaveTextContent(mockBlog.url)
   expect(component.container).toHaveTextContent(mockBlog.likes)
+  expect(component.container).toHaveTextContent(mockBlog.user.name)
+  expect(component.container).toHaveTextContent(mockBlog.comments[0].content)
+
 })
 
-test('like button handler is called twice', async () => {
-  const component = render(<Blog blog={mockBlog} handleLike={handleLike} removeBlog={removeBlog} />)
-
-  const showButton = component.getByText('Show')
-  fireEvent.click(showButton)
-
-  const likeButton = component.getByText('Like')
-
-  fireEvent.click(likeButton)
-  fireEvent.click(likeButton)
-
-  expect(handleLike).toBeCalledTimes(2)
-})
 
 
 

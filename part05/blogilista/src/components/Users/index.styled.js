@@ -6,6 +6,9 @@ export const Container = styled.div`
 `
 
 export const Table = styled.table`
+  background-color: #87ffff;
+  border-collapse: collapse;
+  border: none;
   width: 100%;
 `
 
@@ -14,19 +17,23 @@ export const TableHeadCell = styled.th`
   border-spacing: 0;
   font-family: 'Merriweather Sans', sans-serif;
   font-size: 16px;
-  padding: 4px;
+  padding: 8px 16px;
   text-align: ${({ type }) => type === 'number' ? 'right' : 'left'};
 `
 
 export const TableRow = styled.tr`
+  &:nth-child(odd) {
+    background-color: #009eae;
+  }
+  
   &:nth-child(even) {
-    background-color: #18ffff;
+    background-color: #87ffff;
   }
 `
 
 export const TableHead = styled.thead`
   ${TableRow} {
-    background-color: #18ffff;
+    background-color: #87ffff;
   }
 `
 
@@ -36,7 +43,7 @@ export const TableCell = styled.td`
   font-family: 'Merriweather Sans', sans-serif;
   font-size: 16px;
   font-weight: 300;
-  padding: 4px;
+  padding: 8px 16px;
   text-align: ${({ type }) => type === 'number' ? 'right' : 'left'};
 `
 

@@ -20,6 +20,7 @@ import * as s from './index.styled'
 
 const GlobalStyle = createGlobalStyle`
   body {
+    background-color: #4dd0e1;
     margin: 0;
   }
 

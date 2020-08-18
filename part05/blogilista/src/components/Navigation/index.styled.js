@@ -23,7 +23,7 @@ export const LogoutButton = styled(Button)`
 
 export const Navigation = styled.nav`
   align-items: center;
-  background-color: #18ffff;
+  background-color: #009eae;
   box-sizing: border-box;
   display: flex;
   justify-content: flex-start;

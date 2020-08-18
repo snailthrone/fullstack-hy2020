@@ -9,7 +9,7 @@ import { userLogin } from '../../reducers/userReducer'
 import { setNotification } from '../../reducers/notificationReducer'
 
 import * as s from './index.styled'
-import { Form, FormLabel, FormLabelText, FormInput } from '../Form'
+import { Form, FormLabel, FormLabelText, FormInput } from '../common'
 
 const Login = () => {
   const dispatch = useDispatch()

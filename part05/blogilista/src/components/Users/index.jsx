@@ -10,7 +10,7 @@ const Users = () => {
   return (
     <s.Container>
       <Heading3>Users</Heading3>
-      <s.Table>
+      <s.Table cellspacing="0" cellpadding="0">
         <s.TableHead>
           <s.TableRow>
             <s.TableHeadCell>Name</s.TableHeadCell>

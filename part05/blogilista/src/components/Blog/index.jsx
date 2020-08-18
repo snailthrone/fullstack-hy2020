@@ -1,6 +1,7 @@
 import React from 'react'
-import { number, shape, string } from 'prop-types'
+import { arrayOf, number, shape, string } from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 
 // Hooks
 import useField from '../../hooks/useField'
@@ -9,25 +10,32 @@ import useField from '../../hooks/useField'
 import { addComment, likeBlog, removeBlog } from '../../reducers/blogReducer'
 import { setNotification } from '../../reducers/notificationReducer.js'
 
-import { FormInput } from '../Form'
-import { Heading3 } from '../common'
+import { FormInput, Heading3 } from '../common'
 import * as s from './index.styled'
 
 const Blog = ({ blog }) => {
+  const history = useHistory()
   const dispatch = useDispatch()
-  const { login: { user } } = useSelector(state => state)
+  const { login } = useSelector(state => state)
   const comment = useField('text')
+
   const handleComment = event => {
     event.preventDefault()
-    dispatch(addComment(blog.id, comment.value, user.token))
-    comment.reset()
+    if (comment.value.length > 0) {
+      dispatch(addComment(blog.id, comment.value, login.user.token))
+      comment.reset()
+    }
   }
 
   const handleLike = () => dispatch(likeBlog(blog))
 
   const handleRemove = async () => {
-    const { message, status } = await dispatch(removeBlog(blog))
-    dispatch(setNotification(message, status))
+    const response = await dispatch(removeBlog(blog, login.user.token))
+
+    if (response) {
+      dispatch(setNotification(response.message, response.status))
+      history.push('/')
+    }
   }
 
   return (
@@ -63,12 +71,19 @@ const Blog = ({ blog }) => {
 
 Blog.propTypes = {
   blog: shape({
-    title: string.isRequired,
     author: string.isRequired,
-    url: string.isRequired,
+    comments: arrayOf(shape({
+      content: string,
+      id: string,
+    })).isRequired,
+    id: string.isRequired,
     likes: number.isRequired,
+    title: string.isRequired,
+    url: string.isRequired,
     user: shape({
+      id: string.isRequired,
       name: string.isRequired,
+      username: string.isRequired,
     }).isRequired
   }).isRequired
 }
