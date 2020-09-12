@@ -5,7 +5,7 @@
 
 import { Gender, NewPatient } from '../types';
 
-const isDate = (date: string): boolean => Boolean(Date.parse(date));
+export const isDate = (date: string): boolean => Boolean(Date.parse(date));
 
 const isSsn = (ssn: string): boolean => {
   const restring = /^[A-Za-z0-9]+$/;
@@ -16,9 +16,9 @@ const isSsn = (ssn: string): boolean => {
   return true;
 };
 
-const isString = (text: any): text is string => typeof text === 'string' || text instanceof String;
+export const isString = (text: any): text is string => typeof text === 'string' || text instanceof String;
 
-const parseDate = (date: any): string => {
+export const parseDate = (date: any): string => {
   if (!date || !isString(date) || !isDate(date)) {
     throw new Error(`Incorrect or missing date: ${date}`);
   }

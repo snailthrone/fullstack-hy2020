@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import express from 'express';
 
-import { addPatient, getPatient, getPatients } from '../services/patientService';
+import { addPatient, addPatientEntry, getPatient, getPatients } from '../services/patientService';
 import toNewPatient from '../utils/toNewPatient';
-
+import toNewEntry from '../utils/toNewEntry';
+ 
 const router = express.Router();
 
 router.get('/', (_req, res) => {
@@ -28,8 +29,7 @@ router.post('/', (req, res) => {
     res.json(addedPatient);
   } catch (e) {
     if (e instanceof Error) {
-      console.log('Error:', e.message);
-      res.send(e.message);
+      res.send(`Error: ${e.message}`);
     } else {
       throw e;
     }
@@ -37,8 +37,17 @@ router.post('/', (req, res) => {
 });
 
 router.post('/:id/entries', (req, res) => {
-  console.log(req.params.id);
-  res.json({ foo: 'bar' });
+  try {
+    const newEntry = toNewEntry(req.body);
+    const modifiedPatient = addPatientEntry(req.params.id, newEntry);
+    res.json(modifiedPatient);
+  } catch (e) {
+    if (e instanceof Error) {
+      res.send(`Error: ${e.message}`);
+    } else {
+      throw e;
+    }
+  }
 });
 
 export default router;

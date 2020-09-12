@@ -18,7 +18,7 @@ export enum HealthCheckRating {
   "HighRisk" = 2,
   "CriticalRisk" = 3
 }
-interface BaseEntry {
+export interface BaseEntry {
   id: string;
   description: string;
   date: string;
@@ -26,27 +26,33 @@ interface BaseEntry {
   diagnosisCodes?: Array<Diagnosis['code']>;
 }
 
-interface HospitalEntry extends BaseEntry {
+export type Discharge = {
+  date: string;
+  criteria: string;
+};
+
+export interface HospitalEntry extends BaseEntry {
   type: 'Hospital';
-  discharge: {
-    date: string;
-    criteria: string;
-  }
+  discharge: Discharge;
 }
 
-interface OccupationalHealthCareEntry extends BaseEntry {
+export type SickLeave = {
+  startDate: string;
+  endDate: string;
+};
+
+export interface OccupationalHealthCareEntry extends BaseEntry {
   type: 'OccupationalHealthcare';
   employerName: string;
-  sickLeave: {
-    startDate: string;
-    endDate: string;
-  }
+  sickLeave: SickLeave;
 }
 
-interface HealthCheckEntry extends BaseEntry {
+export interface HealthCheckEntry extends BaseEntry {
   type: 'HealthCheck';
   healthCheckRating: HealthCheckRating;
 }
+
+export type EntryType = 'HealthCheck' | 'Hospital' | 'OccupationalHealthcare';
 
 export type Entry =
   | HospitalEntry
