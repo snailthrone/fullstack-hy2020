@@ -106,7 +106,8 @@ const parseSickLeave = (sickLeave: any): SickLeave => {
 const isHealthCheckRating = (param: any): param is HealthCheckRating => Object.values(HealthCheckRating).includes(param);
 
 const parseHealthCheckRating = (rating: any): HealthCheckRating => {
-  if (!rating || !isHealthCheckRating(rating)) {
+  console.log(rating, !isNaN(rating), !isHealthCheckRating(rating))
+  if (isNaN(rating) || !isHealthCheckRating(rating)) {
     throw Error(`Invalid or missing health check rating`);
   }
   return rating;
