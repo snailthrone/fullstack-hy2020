@@ -9,7 +9,6 @@ const router = express.Router();
 
 router.get('/', (_req, res) => {
   const data = getPatients();
-  console.log(data);
   res.json({ data });
 });
 
@@ -29,7 +28,7 @@ router.post('/', (req, res) => {
     res.json(addedPatient);
   } catch (e) {
     if (e instanceof Error) {
-      res.send(`Error: ${e.message}`);
+      res.status(400).send(`Error: ${e.message}`);
     } else {
       throw e;
     }
@@ -43,7 +42,7 @@ router.post('/:id/entries', (req, res) => {
     res.json(modifiedPatient);
   } catch (e) {
     if (e instanceof Error) {
-      res.send(`Error: ${e.message}`);
+      res.status(400).send(`Error: ${e.message}`);
     } else {
       throw e;
     }

@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 router.get('/', (_req, res) => {
-    console.log('someone pinged here');
     res.send('pong');
 });
 exports.default = router;
