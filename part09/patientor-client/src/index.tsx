@@ -7,10 +7,10 @@ import App from './App';
 import { reducer, StateProvider } from './state';
 
 ReactDOM.render(
-    <StateProvider reducer={reducer}>
-      <Router>
-        <App />
-      </Router>
-    </StateProvider>,
+  <StateProvider reducer={reducer}>
+    <Router>
+      <App />
+    </Router>
+  </StateProvider>,
   document.getElementById('root')
 );

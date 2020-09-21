@@ -64,11 +64,10 @@ interface NumberProps extends FieldProps {
   max: number;
 }
 
-export const NumberField: React.FC<NumberProps> = ({ error, field, label, min, max }) => (
+export const NumberField: React.FC<NumberProps> = ({ field, label, min, max }) => (
   <Form.Field>
     <label>{label}</label>
     <Field {...field} type="number" min={min} max={max} />
-
     <div style={{ color: 'red' }}>
       <ErrorMessage name={field.name} />
     </div>
@@ -83,7 +82,7 @@ export const DiagnosisSelection = ({
   diagnoses: Diagnosis[];
   setFieldValue: FormikProps<{ diagnosisCodes: string[] }>['setFieldValue'];
   setFieldTouched: FormikProps<{ diagnosisCodes: string[] }>['setFieldTouched'];
-}) => {
+}): JSX.Element => {
   const field = 'diagnosisCodes';
   const onChange = (_event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
     setFieldTouched(field, true);

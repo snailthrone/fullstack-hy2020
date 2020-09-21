@@ -56,12 +56,11 @@ const PatientPage: FC<Props> = ({ id }) => {
     }, 3000);
   }, [error]);
 
-  const submitNewEntry = async (values: EntryFormValues) => {
+  const submitNewEntry = async (values: EntryFormValues): Promise<void> => {
     console.log(values);
     try {
       const modifiedPatient = await addPatientEntry(id, values);
-      console.log(modifiedPatient);
-      dispatch(updatePatient(modifiedPatient.data));
+      dispatch(updatePatient(modifiedPatient));
     } catch (e) {
       console.error(e.response.data);
       setError(e.response.data);

@@ -16,8 +16,7 @@ import { getPatients } from './services/patients';
 const App: React.FC = () => {
   const [, dispatch] = useStateValue();
   React.useEffect(() => {
-    // axios.get<Promise<string>>(`/ping`);
-    const fetchPatientList = async () => {
+    const fetchPatientList = async (): Promise<void> => {
       console.log('Fetching patients');
       try {
         const patientListFromApi = await getPatients();
@@ -26,13 +25,13 @@ const App: React.FC = () => {
         console.error(e);
       }
     };
-    const fetchDiagnoses = async () => {
+    const fetchDiagnoses = async (): Promise<void> => {
       console.log('Fetching diagnoses');
       try {
         const diagnosesFromApi = await getDiagnoses();
         dispatch(setDiagnoses(diagnosesFromApi));
-      } catch (error) {
-        console.error(error.message);
+      } catch (e) {
+        console.error(e);
       }
     };
     fetchPatientList();

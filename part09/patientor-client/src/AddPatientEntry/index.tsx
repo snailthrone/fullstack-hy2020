@@ -117,7 +117,7 @@ const AddPatientEntry: FC<Props> = ({ submit }) => {
     <Container>
       <Header as="h3">Add new entry</Header>
       <Formik initialValues={initialValues} onSubmit={submit} validationSchema={EntrySchema}>
-        {({ errors, dirty, isValid, setFieldValue, setFieldTouched, values }) => {
+        {({ dirty, isValid, setFieldValue, setFieldTouched, values }) => {
           return (
             <Form className="form ui">
               <SelectField label="Type" name="type" options={entryOptions} />
